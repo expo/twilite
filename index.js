@@ -11,7 +11,7 @@ function _optsFromArgs(args, params) {
     } else {
       let k = params[i];
       if (!k) {
-        throw new Error("Wrong number of arguments. Expected: " + params);
+        throw new Error('Wrong number of arguments. Expected: ' + params);
       }
       opts[k] = o;
     }
@@ -20,15 +20,14 @@ function _optsFromArgs(args, params) {
 }
 
 class Twilite {
-
   /**
    * An object that you can call a method on to send SMS messages
-   * 
+   *
    * @param {string} AccountSid Your Twilio AccountSid like ACXXXXXXXXXX
    * @param {string} AuthToken The AuthToken for your account like 178327482abc342
    * @param {string} [From] The Twilio phone number to send from by default
    * @param {object} [opts] {AccountSid, AuthToken, From, API_BASE_URL} Can be anywhere after the other arguments
-   * 
+   *
    */
   constructor(AccountSid, AuthToken, From, opts) {
     opts = _optsFromArgs(arguments, ['AccountSid', 'AuthToken', 'From']);
@@ -68,7 +67,11 @@ class Twilite {
   /**
    * Sends a message using a POST to the Twilio API
    *
-   * @param {*} params {Body, From, MediaUrl, To}
+   * @param {string} To The phone number to send to
+   * @param {string} Body The text of the message you want to send (will default to a test message)
+   * @param {string} [MediaUrl] The URL of media you want to attach, if any. Ex. http://ccheever.com/Duckling.png
+   * @param {object} [params] {Body, From, MediaUrl, To}
+   *
    */
   async sendMessageAsync(To, Body, MediaUrl, params) {
     // curl -X POST https://api.twilio.com/2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages.json \
