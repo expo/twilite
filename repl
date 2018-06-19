@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+node --experimental-repl-await -i -e '(()=>{let start=Date.now();global.twilite=require(".");let end=Date.now();console.log("// twilite required in " + (end - start) + "ms. See README.md for usage.");})();process.stdout.write("> ");'
