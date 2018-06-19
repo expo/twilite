@@ -2,19 +2,38 @@ let fetch = require('node-fetch');
 let FormData = require('form-data');
 let phone = require('phone');
 
+function _optsFromArgs(args, params) {
+  let opts = {};
+  for (let i = 0; i < args.length; i++) {
+    let o = args[i];
+    if (typeof o === 'object') {
+      Object.assign(opts, o);
+    } else {
+      let k = params[i];
+      if (!k) {
+        throw new Error("Wrong number of arguments. Expected: " + params);
+      }
+      opts[k] = o;
+    }
+  }
+  return opts;
+}
+
 class Twilite {
+
   /**
-   *
-   * @param {*} opts {AccountSid, AuthToken, From, API_BASE_URL}
+   * An object that you can call a method on to send SMS messages
+   * 
+   * @param {string} AccountSid Your Twilio AccountSid like ACXXXXXXXXXX
+   * @param {string} AuthToken The AuthToken for your account like 178327482abc342
+   * @param {string} [From] The Twilio phone number to send from by default
+   * @param {object} [opts] {AccountSid, AuthToken, From, API_BASE_URL} Can be anywhere after the other arguments
+   * 
    */
-  constructor(...args) {
-    let opts = args[args.length - 1];
-    opts = (typeof opts === 'object' && opts) || {};
+  constructor(AccountSid, AuthToken, From, opts) {
+    opts = _optsFromArgs(arguments, ['AccountSid', 'AuthToken', 'From']);
     Object.assign(this, opts);
     this.API_BASE_URL = this.API_BASE_URL || 'https://api.twilio.com/2010-04-01/';
-    this.AccountSid = this.AccountSid || args[0];
-    this.AuthToken = this.AuthToken || args[1];
-    this.From = this.From || args[2];
   }
 
   _accountBaseUrl() {
@@ -51,20 +70,21 @@ class Twilite {
    *
    * @param {*} params {Body, From, MediaUrl, To}
    */
-  async sendMessageAsync(params) {
+  async sendMessageAsync(To, Body, MediaUrl, params) {
     // curl -X POST https://api.twilio.com/2010-04-01/Accounts/ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Messages.json \
     //      --data-urlencode "Body=Let's grab lunch at Milliways tomorrow!" \
     //      --data-urlencode "From=+14158141829" \
     //      --data-urlencode "MediaUrl=http://www.example.com/cheeseburger.png" \
     //      --data-urlencode "To=+15558675310" \
     //      -u ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX:your_auth_token
-    let postParams = {
-      ...{
+    params = _optsFromArgs(arguments, ['To', 'Body', 'MediaUrl']);
+    let postParams = Object.assign(
+      {
         From: this.From,
         Body: 'Test from Twilio at ' + new Date(),
       },
-      ...params,
-    };
+      params
+    );
 
     postParams.From = this._normalizeNumber(postParams.From, 'From');
     postParams.To = this._normalizeNumber(postParams.To, 'To');
