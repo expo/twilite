@@ -26,6 +26,7 @@ let tw = twilite({
         AuthToken: '23424ab_AuthToken_', // Your AuthToken
         From: '412-555-1212', // Default From # (optional)
     });
+    
 await tw.sendMessageAsync({
     To: '650-555-1212', // # to send the message to
     Body: "This is the content of the message.",
