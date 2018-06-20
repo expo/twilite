@@ -2,23 +2,6 @@ let fetch = require('node-fetch');
 let FormData = require('form-data');
 let phone = require('phone');
 
-function _optsFromArgs(args, params) {
-  let opts = {};
-  for (let i = 0; i < args.length; i++) {
-    let o = args[i];
-    if (typeof o === 'object') {
-      Object.assign(opts, o);
-    } else {
-      let k = params[i];
-      if (!k) {
-        throw new Error('Wrong number of arguments. Expected: ' + params);
-      }
-      opts[k] = o;
-    }
-  }
-  return opts;
-}
-
 class Twilite {
   /**
    * An object that you can call a method on to send SMS messages
@@ -112,5 +95,23 @@ class Twilite {
     return result;
   }
 }
+
+function _optsFromArgs(args, params) {
+  let opts = {};
+  for (let i = 0; i < args.length; i++) {
+    let o = args[i];
+    if (typeof o === 'object') {
+      Object.assign(opts, o);
+    } else {
+      let k = params[i];
+      if (!k) {
+        throw new Error('Wrong number of arguments. Expected: ' + params);
+      }
+      opts[k] = o;
+    }
+  }
+  return opts;
+}
+
 
 module.exports = (...args) => new Twilite(...args);
