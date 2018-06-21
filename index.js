@@ -83,7 +83,7 @@ class Twilite {
     }
 
     let auth = this.AccountSid + ':' + this.AuthToken;
-    console.log(postParams);
+
     let response = await fetch(this._messagesUrl(), {
       method: 'POST',
       body: form,
