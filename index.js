@@ -1,4 +1,4 @@
-let fetch = require('node-fetch');
+let fetch = require('cross-fetch');
 let FormData = require('form-data');
 let phone = require('phone');
 
